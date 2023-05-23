@@ -1,122 +1,283 @@
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
+import javafx.scene.Node;
+
 
 public class Piece {
-    private int[][] coords;
-    private int[][] originalCoords;
-    private final int[] startCoords = { 6, 1 };
-    private Square[] squares = new Square[4];
-    private Pane pane;
-    private Color color;
-    private int type;
+    private Square _rect1;
+	private Square _rect2;
+	private Square _rect3;
+	private Square _rect4;
+	private Board _board;
+	private Square[][] _rects;
+	public int _num;
 
-    public Piece(Pane pane) {
-        this.pane = pane;
-        int random = (int) (Math.random() * 7);
-        this.type = random;
-        switch (random) {
-            case 0:
-                this.coords = new int[][] { { -1, 0 }, { 0, 0 }, { 1, 0 }, { 2, 0 } };
-                this.originalCoords = new int[][] { { -1, 0 }, { 0, 0 }, { 1, 0 }, { 2, 0 } };
-                this.color = Color.AQUA;
-                break;
-            case 1:
-                this.coords = new int[][] { { 0, -1 }, { 0, 0 }, { 1, 0 }, { 0, 1 } };
-                this.originalCoords = new int[][] { { 0, -1 }, { 0, 0 }, { 1, 0 }, { 0, 1 } };
-                this.color = Color.PURPLE;
-                break;
-            case 2:
-                this.coords = new int[][] { { -1, 0 }, { 0, 0 }, { 1, 0 }, { 1, 1 } };
-                this.originalCoords = new int[][] { { -1, 0 }, { 0, 0 }, { 1, 0 }, { 1, 1 } };
-                this.color = Color.ORANGE;
-                break;
-            case 3:
-                this.coords = new int[][] { { -1, 1 }, { 0, 1 }, { 1, 1 }, { 1, 0 } };
-                this.originalCoords = new int[][] { { -1, 1 }, { 0, 1 }, { 1, 1 }, { 1, 0 } };
-                this.color = Color.PINK;
-                break;
-            case 4:
-                this.coords = new int[][] { { 0, 0 }, { 0, 1 }, { 1, 0 }, { 1, 1 } };
-                this.originalCoords = new int[][] { { 0, 0 }, { 0, 1 }, { 1, 0 }, { 1, 1 } };
-                this.color = Color.YELLOW;
-                break;
-            case 5:
-                this.coords = new int[][] { { 1, -1 }, { 1, 0 }, { 0, 0 }, { 0, 1 } };
-                this.originalCoords = new int[][] { { 1, -1 }, { 1, 0 }, { 0, 0 }, { 0, 1 } };
-                this.color = Color.RED;
-                break;
-            case 6:
-                this.coords = new int[][] { { 0, -1 }, { 0, 0 }, { 1, 0 }, { 1, 1 } };
-                this.originalCoords = new int[][] { { 0, -1 }, { 0, 0 }, { 1, 0 }, { 1, 1 } };
-                this.color = Color.GREEN;
-                break;
-        }
-        this.addToPane();
-    }
+	public Piece (int num) {
+		_board = new Board();
+		_rects = _board.getRectangles();
+		_rect1 = new Square();
+		_rect2 = new Square();
+		_rect3 = new Square();
+		_rect4 = new Square();
+		_num = num;
+		this.setXLocation(6);
+		this.setYLocation(3);
+		this.setColor();
+	}	
+	public void setColor(){
+		switch(_num){
+		case 1:
+			_rect1.setColor(Color.BLUE);
+			_rect2.setColor(Color.BLUE);
+			_rect3.setColor(Color.BLUE);
+			_rect4.setColor(Color.BLUE);
+			break;
+		case 2:
+			_rect1.setColor(Color.YELLOW);
+			_rect2.setColor(Color.YELLOW);
+			_rect3.setColor(Color.YELLOW);
+			_rect4.setColor(Color.YELLOW);
+			break;
+		case 3:
+			_rect1.setColor(Color.ORANGE);
+			_rect2.setColor(Color.ORANGE);
+			_rect3.setColor(Color.ORANGE);
+			_rect4.setColor(Color.ORANGE);
+			break;
+		case 4:
+			_rect1.setColor(Color.RED);
+			_rect2.setColor(Color.RED);
+			_rect3.setColor(Color.RED);
+			_rect4.setColor(Color.RED);
+			break;
+		case 5:
+			_rect1.setColor(Color.PINK);
+			_rect2.setColor(Color.PINK);
+			_rect3.setColor(Color.PINK);
+			_rect4.setColor(Color.PINK);
+			break;
+		case 6:
+			_rect1.setColor(Color.GREEN);
+			_rect2.setColor(Color.GREEN);
+			_rect3.setColor(Color.GREEN);
+			_rect4.setColor(Color.GREEN);
+			break;
+		case 7:
+			_rect1.setColor(Color.PURPLE);
+			_rect2.setColor(Color.PURPLE);
+			_rect3.setColor(Color.PURPLE);
+			_rect4.setColor(Color.PURPLE);
+			break;
+		default:
+			_rect1.setColor(Color.BLUE);
+			_rect2.setColor(Color.BLUE);
+			_rect3.setColor(Color.BLUE);
+			_rect4.setColor(Color.BLUE);
+			break;
+		
+		}
+	}
+	public Paint getColor(){
+		 return _rect1.getColor();
+	}
 
-    public void addToPane() {
-        for (int i = 0; i < this.coords.length; i++) {
-            int[] duple = this.coords[i];
-            Square newSquare = new Square(startCoords[0] + duple[1], startCoords[1] + duple[0]);
-            newSquare.setColor(this.color);
-            this.squares[i] = newSquare;
-            this.pane.getChildren().addAll(newSquare.getShape());
-        }
-    }
+	public void setXLocation(double x){
 
-    public void removeFromPane() {
-        this.pane.getChildren().removeAll(this.squares[0].getShape(), this.squares[1].getShape(),
-                this.squares[2].getShape(), this.squares[3].getShape());
-    }
-
-    public void moveDown() {
-        this.removeFromPane();
-        for (int i = 0; i < 4; i++) {
-            this.coords[i][0]++;
-        }
-        this.addToPane();
-    }
-
-    public void moveRight() {
-        this.removeFromPane();
-        for (int i = 0; i < 4; i++) {
-            this.coords[i][1]++;
-        }
-        this.addToPane();
-    }
-
-    public void moveLeft() {
-        this.removeFromPane();
-        for (int i = 0; i < 4; i++) {
-            this.coords[i][1]--;
-        }
-        this.addToPane();
-    }
-
-    public int[][] getCoords() {
-        return this.coords;
-    }
-
-    public void rotate(int x, int y) {
-        this.removeFromPane();
-        for (int[] coord : this.originalCoords) {
-            int temp = coord[0];
-            coord[0] = -1 * coord[1];
-            coord[1] = temp;
-        }
-        for (int i = 0; i < this.coords.length; i++) {
-            int[] coord = this.coords[i];
-            coord[0] = this.originalCoords[i][0] + y;
-            coord[1] = this.originalCoords[i][1] + x;
-        }
-        this.addToPane();
-    }
-
-    public int[][] getOriginalCoords() {
-        return this.originalCoords;
-    }
-
-    public Color getColor() {
-        return this.color;
-    }
+		switch(_num){
+		case 1:
+			_rect1.setXLocation(x);
+			_rect2.setXLocation(x +1);
+			_rect3.setXLocation(x +2);
+			_rect4.setXLocation(x +3);
+			break;
+		case 2:
+			_rect1.setXLocation(x);
+			_rect2.setXLocation(x +1);
+			_rect3.setXLocation(x);
+			_rect4.setXLocation(x +1);
+			break;
+		case 3: 
+			_rect1.setXLocation(x);
+			_rect2.setXLocation(x+1);
+			_rect3.setXLocation(x+2);
+			_rect4.setXLocation(x +1);
+			break;
+		case 4:
+			_rect1.setXLocation(x);
+			_rect2.setXLocation(x+1);
+			_rect3.setXLocation(x+2);
+			_rect4.setXLocation(x);
+			break;
+		case 5:
+			_rect1.setXLocation(x);
+			_rect2.setXLocation(x+1);
+			_rect3.setXLocation(x+2);
+			_rect4.setXLocation(x+2);
+			
+			break;
+		case 6:
+			_rect1.setXLocation(x);
+			_rect2.setXLocation(x+1);
+			_rect3.setXLocation(x+1);
+			_rect4.setXLocation(x+2);
+			break;
+		case 7: 
+			_rect1.setXLocation(x);
+			_rect2.setXLocation(x-1);
+			_rect3.setXLocation(x-1);
+			_rect4.setXLocation(x-2);
+			break;
+		default:
+			_rect1.setXLocation(x);
+			_rect2.setXLocation(x +1);
+			_rect3.setXLocation(x +2);
+			_rect4.setXLocation(x +3);
+		}
+	}
+	
+	public void setYLocation(double y){
+		switch(_num){
+		case 1:
+		   	_rect1.setYLocation(y-1);
+			_rect2.setYLocation(y-1);
+			_rect3.setYLocation(y-1);
+			_rect4.setYLocation(y-1);
+		break;
+		case 2:
+			_rect1.setYLocation(y);
+			_rect2.setYLocation(y);
+			_rect3.setYLocation(y-1);
+			_rect4.setYLocation(y-1);
+		break;
+		case 3:
+			_rect1.setYLocation(y);
+			_rect2.setYLocation(y);
+			_rect3.setYLocation(y);
+			_rect4.setYLocation(y-1);	
+			break;
+		case 4:
+			_rect1.setYLocation(y);
+			_rect2.setYLocation(y);
+			_rect3.setYLocation(y);
+			_rect4.setYLocation(y-1);
+			break;
+		case 5:
+			_rect1.setYLocation(y);
+			_rect2.setYLocation(y);
+			_rect3.setYLocation(y);
+			_rect4.setYLocation(y-1);
+			break;
+		case 6:
+			_rect1.setYLocation(y);
+			_rect2.setYLocation(y);
+			_rect3.setYLocation(y-1);
+			_rect4.setYLocation(y-1);
+			break;
+		case 7:
+			_rect1.setYLocation(y);
+			_rect2.setYLocation(y);
+			_rect3.setYLocation(y -1);
+			_rect4.setYLocation(y -1);
+			break;
+		default:
+			_rect1.setYLocation(y-1);
+			_rect2.setYLocation(y-1);
+			_rect3.setYLocation(y-1);
+			_rect4.setYLocation(y-1);
+		}
+	}	
+	
+	public void rotate(){
+		double newX1Loc = _rect2.getXLocation() - _rect2.getYLocation() + _rect1.getYLocation();
+		double newY1Loc = _rect2.getYLocation() + _rect2.getXLocation() - _rect1.getXLocation();
+		double newX3Loc = _rect2.getXLocation() - _rect2.getYLocation() + _rect3.getYLocation();
+		double newY3Loc = _rect2.getYLocation() + _rect2.getXLocation() - _rect3.getXLocation();
+		double newX4Loc = _rect2.getXLocation() - _rect2.getYLocation() + _rect4.getYLocation();
+		double newY4Loc = _rect2.getYLocation() + _rect2.getXLocation() - _rect4.getXLocation();
+		
+		
+		if (_rects[(int) newX1Loc][(int) newY1Loc].getColor() == Color.BLACK &&
+			_rects[(int) newX3Loc][(int) newY3Loc].getColor() == Color.BLACK &&	
+			_rects[(int) newX4Loc][(int) newY4Loc].getColor() == Color.BLACK){
+			_rect1.setXLocation(newX1Loc);
+			_rect1.setYLocation(newY1Loc);
+			_rect3.setXLocation(newX3Loc);
+			_rect3.setYLocation(newY3Loc);
+			_rect4.setXLocation(newX4Loc);
+			_rect4.setYLocation(newY4Loc);
+		}
+	}
+	
+	public void moveDown(){
+		_rect1.setYLocation(_rect1.getYLocation()+1);
+		_rect2.setYLocation(_rect2.getYLocation()+1);
+		_rect3.setYLocation(_rect3.getYLocation()+1);
+		_rect4.setYLocation(_rect4.getYLocation()+1);
+		
+	}
+	
+	public void moveRight(){
+		_rect1.setXLocation(_rect1.getXLocation()+1);
+		_rect2.setXLocation(_rect2.getXLocation()+1);
+		_rect3.setXLocation(_rect3.getXLocation()+1);
+		_rect4.setXLocation(_rect4.getXLocation()+1);
+	}
+	
+	public void moveLeft(){
+		_rect1.setXLocation(_rect1.getXLocation()-1);
+		_rect2.setXLocation(_rect2.getXLocation()-1);
+		_rect3.setXLocation(_rect3.getXLocation()-1);
+		_rect4.setXLocation(_rect4.getXLocation()-1);
+	}
+	
+	
+	public int getN1XLoc(){
+		return (int) _rect1.getXLocation();		
+	}
+	
+	public int getN2XLoc(){
+		return (int) _rect2.getXLocation();
+ 	}
+	
+	public int getN3XLoc(){
+		return (int) _rect3.getXLocation();
+	}
+	
+	public int getN4XLoc(){
+		return (int) _rect4.getXLocation();
+	}
+	
+	public int getN1YLoc(){
+		return (int) _rect1.getYLocation();
+	}
+	
+	public int getN2YLoc(){
+		return (int) _rect2.getYLocation();
+	}
+	
+	public int getN3YLoc(){
+		return (int) _rect3.getYLocation();
+	}
+	
+	public int getN4YLoc(){
+		return (int) _rect4.getYLocation();
+	}
+	
+	
+	public Node getNode1(){
+		return _rect1.getNode();
+	}
+	
+	public Node getNode2(){
+		return _rect2.getNode();
+	}
+	
+	public Node getNode3(){
+		return _rect3.getNode();
+	}
+	
+	public Node getNode4(){
+		return _rect4.getNode();
+	}
 }
